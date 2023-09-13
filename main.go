@@ -2,9 +2,20 @@ package main
 
 import (
 	"log"
+	"net/http"
+
+	"github.com/fajrizulfikar/ecommerce-api/src/config"
+	"github.com/fajrizulfikar/ecommerce-api/src/routes"
+	"gorm.io/gorm"
+)
+
+var (
+	db *gorm.DB = config.ConnectDB()
 )
 
 func main() {
+	defer config.DisconnectDB(db)
+
 	log.Println("Server started at port 3000")
-	// log.Fatal(http.ListenAndServe(":3000", route))
+	log.Fatal(http.ListenAndServe(":3000", routes.Routes()))
 }

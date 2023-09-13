@@ -7,11 +7,11 @@ import (
 )
 
 func Routes() http.Handler {
-	route := mux.NewRouter()
+	r := mux.NewRouter()
 
-	route.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello world!\n"))
 	})
 
-	return route
+	return r
 }
