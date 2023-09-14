@@ -1,5 +1,5 @@
 -- migrate:up
-create table users (
+CREATE TABLE IF NOT EXISTS users (
     "id" UUID NOT NULL,
     "username" VARCHAR NOT NULL UNIQUE,
     "password" VARCHAR NOT NULL,
