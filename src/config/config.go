@@ -23,7 +23,7 @@ func ConnectDB() *gorm.DB {
 	dbPortStr := os.Getenv("DB_PORT")
 	dbPort, err := strconv.Atoi(dbPortStr)
 	if err != nil {
-		panic("Failed to convert port to int")
+		panic("Failed to parse port to number")
 	}
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", dbHost, dbUser, dbPass, dbName, dbPort)
