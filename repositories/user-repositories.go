@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/fajrizulfikar/ecommerce-api/src/models"
+	"github.com/fajrizulfikar/ecommerce-api/models"
 	"gorm.io/gorm"
 )
 

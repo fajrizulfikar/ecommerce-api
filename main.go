@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/fajrizulfikar/ecommerce-api/src/config"
-	"github.com/fajrizulfikar/ecommerce-api/src/routes"
+	"github.com/fajrizulfikar/ecommerce-api/config"
+	"github.com/fajrizulfikar/ecommerce-api/routes"
 	"gorm.io/gorm"
 )
 
