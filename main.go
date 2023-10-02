@@ -8,11 +8,20 @@ import (
 	"github.com/fajrizulfikar/ecommerce-api/database"
 	"github.com/fajrizulfikar/ecommerce-api/models"
 	"github.com/fajrizulfikar/ecommerce-api/routes"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	loadEnv()
 	loadDatabase()
 	serverApplication()
+}
+
+func loadEnv() {
+	errorEnv := godotenv.Load()
+	if errorEnv != nil {
+		panic("Failed to load env file")
+	}
 }
 
 func loadDatabase() {
