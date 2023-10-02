@@ -1,21 +1,26 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/fajrizulfikar/ecommerce-api/config"
+	"github.com/fajrizulfikar/ecommerce-api/database"
+	"github.com/fajrizulfikar/ecommerce-api/models"
 	"github.com/fajrizulfikar/ecommerce-api/routes"
-	"gorm.io/gorm"
-)
-
-var (
-	db *gorm.DB = config.ConnectDB()
 )
 
 func main() {
-	defer config.DisconnectDB(db)
+	loadDatabase()
+	serverApplication()
+}
 
-	log.Println("Server started at port 3000")
+func loadDatabase() {
+	database.ConnectDB()
+	database.Database.AutoMigrate(&models.User{})
+}
+
+func serverApplication() {
+	fmt.Println("Server running on port 3000")
 	log.Fatal(http.ListenAndServe(":3000", routes.Routes()))
 }

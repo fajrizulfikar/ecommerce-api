@@ -1,4 +1,4 @@
-package config
+package database
 
 import (
 	"fmt"
@@ -10,7 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func ConnectDB() *gorm.DB {
+var Database *gorm.DB
+
+func ConnectDB() {
 	errorEnv := godotenv.Load()
 	if errorEnv != nil {
 		panic("Failed to load env file")
@@ -27,12 +29,12 @@ func ConnectDB() *gorm.DB {
 	}
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", dbHost, dbUser, dbPass, dbName, dbPort)
-	db, errorDB := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if errorDB != nil {
+	Database, err = gorm.Open(postgres.Open(dsn), &gorm.Config{}) // Assign Database here
+	if err != nil {
 		panic("Failed to connect to database")
+	} else {
+		fmt.Println("Successfully connected to the database")
 	}
-
-	return db
 }
 
 func DisconnectDB(db *gorm.DB) {
