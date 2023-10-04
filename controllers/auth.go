@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterUser(w http.ResponseWriter, req *http.Request) {
-	var input models.AuthenticationInput
+	var input models.SignupInput
 	decoder := json.NewDecoder(req.Body)
 	err := decoder.Decode(&input)
 	if err != nil {
@@ -41,9 +41,25 @@ func RegisterUser(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	newUser := models.User{
+		Username: input.Username,
+		Email:    input.Email,
+		Password: input.Password,
+	}
+
+	savedUser, err := newUser.Create()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message": "Failed create user",
+			"errors":  errors,
+		})
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"message": "User created!",
-		"errors":  errors,
+		"user":    savedUser,
 	})
 }
