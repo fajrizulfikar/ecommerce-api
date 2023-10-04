@@ -12,10 +12,11 @@ import (
 type ResponseModel struct {
 	Message string              `json:"message"`
 	Errors  []map[string]string `json:"errors"`
+	User    models.User
 }
 
-func TestRegister(t *testing.T) {
-	newUser := models.AuthenticationInput{
+func TestCreateUserReturnsCreatedStatus(t *testing.T) {
+	newUser := models.SignupInput{
 		Username: "johndoe",
 		Email:    "john@doe.com",
 		Password: "password",
@@ -28,5 +29,7 @@ func TestRegister(t *testing.T) {
 
 	assert.Equal(t, http.StatusCreated, writer.Code)
 	assert.Equal(t, "User created!", result.Message)
-	assert.Equal(t, 0, len(result.Errors))
+
+	assert.NotZero(t, result.User.ID, "User ID should not be 0")
+	assert.False(t, result.User.CreatedAt.IsZero(), "CreatedAt should not be the zero timestamp")
 }
