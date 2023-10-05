@@ -7,10 +7,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Routes() http.Handler {
+func Routes(authController *controllers.AuthController) http.Handler {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/register", controllers.RegisterUser).Methods("POST")
+	r.HandleFunc("/register", authController.RegisterUser).Methods("POST")
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello world!\n"))

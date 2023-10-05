@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/fajrizulfikar/ecommerce-api/controllers"
 	"github.com/fajrizulfikar/ecommerce-api/database"
 	"github.com/fajrizulfikar/ecommerce-api/models"
+	"github.com/fajrizulfikar/ecommerce-api/repositories"
 	"github.com/fajrizulfikar/ecommerce-api/routes"
 	"github.com/joho/godotenv"
 )
@@ -14,7 +16,7 @@ import (
 func main() {
 	loadEnv()
 	loadDatabase()
-	serverApplication()
+	serveApplication()
 }
 
 func loadEnv() {
@@ -29,7 +31,12 @@ func loadDatabase() {
 	database.Database.AutoMigrate(&models.User{})
 }
 
-func serverApplication() {
+func serveApplication() {
 	fmt.Println("Server running on port 3000")
-	log.Fatal(http.ListenAndServe(":3000", routes.Routes()))
+
+	userRepo := repositories.NewUserRepository(database.Database)
+
+	authController := controllers.NewAuthController(userRepo)
+
+	log.Fatal(http.ListenAndServe(":3000", routes.Routes(authController)))
 }

@@ -10,6 +10,7 @@ import (
 
 	"github.com/fajrizulfikar/ecommerce-api/database"
 	"github.com/fajrizulfikar/ecommerce-api/models"
+	"github.com/fajrizulfikar/ecommerce-api/repositories"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
@@ -40,7 +41,11 @@ func teardown() {
 func router() http.Handler {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/register", RegisterUser).Methods("POST")
+	userRepo := repositories.NewUserRepository(database.Database)
+
+	authController := NewAuthController(userRepo)
+
+	r.HandleFunc("/register", authController.RegisterUser).Methods("POST")
 
 	return r
 }

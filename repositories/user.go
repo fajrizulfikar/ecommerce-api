@@ -5,16 +5,27 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository interface {
-	RegisterUser(username string, password string, email string) error
+type UserRepository struct {
+	DB *gorm.DB
 }
 
-type Repository struct {
-	db *gorm.DB
+func NewUserRepository(db *gorm.DB) *UserRepository {
+	return &UserRepository{DB: db}
 }
 
-func (repo Repository) RegisterUser(user models.User) error {
-	result := repo.db.Create(&user)
+func (repo *UserRepository) Create(user *models.User) (*models.User, error) {
+	err := repo.DB.Create(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
 
-	return result.Error
+func (repo *UserRepository) GetById(userId int) (*models.User, error) {
+	var user models.User
+	err := repo.DB.First(&user, userId).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }

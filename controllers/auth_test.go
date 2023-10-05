@@ -12,7 +12,7 @@ import (
 type ResponseModel struct {
 	Message string              `json:"message"`
 	Errors  []map[string]string `json:"errors"`
-	User    models.User
+	User    models.User         `json:"user"`
 }
 
 func TestCreateUserReturnsCreatedStatus(t *testing.T) {

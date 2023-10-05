@@ -5,9 +5,18 @@ import (
 	"net/http"
 
 	"github.com/fajrizulfikar/ecommerce-api/models"
+	"github.com/fajrizulfikar/ecommerce-api/repositories"
 )
 
-func RegisterUser(w http.ResponseWriter, req *http.Request) {
+type AuthController struct {
+	Repo *repositories.UserRepository
+}
+
+func NewAuthController(repo *repositories.UserRepository) *AuthController {
+	return &AuthController{Repo: repo}
+}
+
+func (ctrl *AuthController) RegisterUser(w http.ResponseWriter, req *http.Request) {
 	var input models.SignupInput
 	decoder := json.NewDecoder(req.Body)
 	err := decoder.Decode(&input)
@@ -47,7 +56,7 @@ func RegisterUser(w http.ResponseWriter, req *http.Request) {
 		Password: input.Password,
 	}
 
-	savedUser, err := newUser.Create()
+	savedUser, err := ctrl.Repo.Create(&newUser)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]interface{}{
