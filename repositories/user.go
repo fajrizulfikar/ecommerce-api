@@ -21,7 +21,7 @@ func (repo *UserRepository) Create(user *models.User) (*models.User, error) {
 	return user, nil
 }
 
-func (repo *UserRepository) GetById(userId int) (*models.User, error) {
+func (repo *UserRepository) GetById(userId uint) (*models.User, error) {
 	var user models.User
 	err := repo.DB.First(&user, userId).Error
 	if err != nil {
