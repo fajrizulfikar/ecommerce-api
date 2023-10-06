@@ -6,6 +6,7 @@ import (
 
 	"github.com/fajrizulfikar/ecommerce-api/models"
 	"github.com/fajrizulfikar/ecommerce-api/repositories"
+	"github.com/fajrizulfikar/ecommerce-api/utils"
 )
 
 type AuthController struct {
@@ -50,10 +51,20 @@ func (ctrl *AuthController) RegisterUser(w http.ResponseWriter, req *http.Reques
 		return
 	}
 
+	hashedPassword, err := utils.HashPassword(input.Password)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"error":   "Internal Server Error",
+			"message": "Failed to process the request. Please try again later.",
+		})
+		return
+	}
+
 	newUser := models.User{
 		Username: input.Username,
 		Email:    input.Email,
-		Password: input.Password,
+		Password: hashedPassword,
 	}
 
 	savedUser, err := ctrl.Repo.Create(&newUser)

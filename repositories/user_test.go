@@ -10,10 +10,16 @@ import (
 )
 
 func TestReturnHashedPasswordWhenUserCreated(t *testing.T) {
+	var password = "password"
+	hashedPassword, err := utils.HashPassword(password)
+	if err != nil {
+		t.Fatalf("Failed to hash password: %v", err)
+	}
+
 	newUser := models.User{
 		Username: "johndoe",
 		Email:    "john@doe.com",
-		Password: "password",
+		Password: hashedPassword,
 	}
 
 	userRepo := NewUserRepository(database.Database)
@@ -28,6 +34,6 @@ func TestReturnHashedPasswordWhenUserCreated(t *testing.T) {
 		t.Fatalf("Failed create user: %v", err)
 	}
 
-	isValidHash := utils.CheckPasswordHash(fetchedUser.Password, newUser.Password)
+	isValidHash := utils.CheckPasswordHash(fetchedUser.Password, password)
 	assert.True(t, isValidHash, "Password was not hashed correctly")
 }
