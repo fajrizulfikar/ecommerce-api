@@ -30,7 +30,7 @@ func TestRegisterUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusCreated, writer.Code)
 		assert.Equal(t, "User created!", result.Message)
-		assert.Equal(t, 3, len(result.Errors))
+		assert.Equal(t, 0, len(result.Errors))
 	})
 }
 
