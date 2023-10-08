@@ -16,7 +16,7 @@ type ResponseModel struct {
 }
 
 func TestRegisterUser(t *testing.T) {
-	t.Run("Should return 201 and confirmed valid input", func(t *testing.T) {
+	t.Run("Should return 201 and confirmation for valid input", func(t *testing.T) {
 		newUser := models.SignupInput{
 			Username: "johndoe",
 			Email:    "john@doe.com",
@@ -31,6 +31,24 @@ func TestRegisterUser(t *testing.T) {
 		assert.Equal(t, http.StatusCreated, writer.Code)
 		assert.Equal(t, "User created!", result.Message)
 		assert.Equal(t, 0, len(result.Errors))
+	})
+
+	t.Run("User saved in database", func(t *testing.T) {
+		newUser := models.SignupInput{
+			Username: "janedoe",
+			Email:    "jane@doe.com",
+			Password: "password",
+		}
+
+		writer := makeRequest("POST", "/register", newUser, false)
+
+		var result ResponseModel
+		json.Unmarshal(writer.Body.Bytes(), &result)
+
+		assert.Equal(t, http.StatusCreated, writer.Code)
+
+		assert.NotZero(t, result.User.ID, "User ID should not be 0")
+		assert.False(t, result.User.CreatedAt.IsZero(), "CreatedAt should not be the zero timestamp")
 	})
 }
 
