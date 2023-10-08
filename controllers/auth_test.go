@@ -50,23 +50,20 @@ func TestRegisterUser(t *testing.T) {
 		assert.NotZero(t, result.User.ID, "User ID should not be 0")
 		assert.False(t, result.User.CreatedAt.IsZero(), "CreatedAt should not be the zero timestamp")
 	})
+
+	t.Run("Verification email is sent to the user", func(t *testing.T) {
+		newUser := models.SignupInput{
+			Username: "johndoe",
+			Email:    "john@doe.com",
+			Password: "password",
+		}
+
+		writer := makeRequest("POST", "/register", newUser, false)
+
+		var result ResponseModel
+		json.Unmarshal(writer.Body.Bytes(), &result)
+
+		assert.Equal(t, http.StatusCreated, writer.Code)
+		assert.Equal(t, "We sent an email with a verification code to "+newUser.Email, result.Message)
+	})
 }
-
-// func TestCreateUserReturnsCreatedStatus(t *testing.T) {
-// 	newUser := models.SignupInput{
-// 		Username: "johndoe",
-// 		Email:    "john@doe.com",
-// 		Password: "password",
-// 	}
-
-// 	writer := makeRequest("POST", "/register", newUser, false)
-
-// 	var result ResponseModel
-// 	json.Unmarshal(writer.Body.Bytes(), &result)
-
-// 	assert.Equal(t, http.StatusCreated, writer.Code)
-// 	assert.Equal(t, "User created!", result.Message)
-
-// 	assert.NotZero(t, result.User.ID, "User ID should not be 0")
-// 	assert.False(t, result.User.CreatedAt.IsZero(), "CreatedAt should not be the zero timestamp")
-// }
