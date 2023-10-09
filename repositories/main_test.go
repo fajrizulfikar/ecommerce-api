@@ -1,12 +1,13 @@
 package repositories
 
 import (
+	"log"
 	"os"
 	"testing"
 
 	"github.com/fajrizulfikar/ecommerce-api/database"
+	"github.com/fajrizulfikar/ecommerce-api/initializers"
 	"github.com/fajrizulfikar/ecommerce-api/models"
-	"github.com/joho/godotenv"
 )
 
 func TestMain(m *testing.M) {
@@ -18,9 +19,9 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	errorEnv := godotenv.Load("../.env.test.local")
-	if errorEnv != nil {
-		panic("Failed to load env file")
+	_, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Could not load environment variables", err)
 	}
 
 	database.ConnectDB()

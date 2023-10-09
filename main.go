@@ -7,10 +7,10 @@ import (
 
 	"github.com/fajrizulfikar/ecommerce-api/controllers"
 	"github.com/fajrizulfikar/ecommerce-api/database"
+	"github.com/fajrizulfikar/ecommerce-api/initializers"
 	"github.com/fajrizulfikar/ecommerce-api/models"
 	"github.com/fajrizulfikar/ecommerce-api/repositories"
 	"github.com/fajrizulfikar/ecommerce-api/routes"
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -20,9 +20,9 @@ func main() {
 }
 
 func loadEnv() {
-	errorEnv := godotenv.Load()
-	if errorEnv != nil {
-		panic("Failed to load env file")
+	_, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Could not load environment variables", err)
 	}
 }
 

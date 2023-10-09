@@ -10,6 +10,7 @@ import (
 )
 
 type ResponseModel struct {
+	Status  bool                `json:"status"`
 	Message string              `json:"message"`
 	Errors  []map[string]string `json:"errors"`
 	User    models.User         `json:"user"`

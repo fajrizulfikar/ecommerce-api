@@ -3,16 +3,17 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
 
 	"github.com/fajrizulfikar/ecommerce-api/database"
+	"github.com/fajrizulfikar/ecommerce-api/initializers"
 	"github.com/fajrizulfikar/ecommerce-api/models"
 	"github.com/fajrizulfikar/ecommerce-api/repositories"
 	"github.com/gorilla/mux"
-	"github.com/joho/godotenv"
 )
 
 func TestMain(m *testing.M) {
@@ -24,9 +25,9 @@ func TestMain(m *testing.M) {
 }
 
 func setup() {
-	errorEnv := godotenv.Load("../.env.test.local")
-	if errorEnv != nil {
-		panic("Failed to load env file")
+	_, err := initializers.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Could not load environment variables", err)
 	}
 
 	database.ConnectDB()
